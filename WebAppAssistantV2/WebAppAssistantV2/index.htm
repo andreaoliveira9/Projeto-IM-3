@@ -455,57 +455,74 @@
           function (data) {
             console.log(data);
 
-            if (data.intent.name == "change_color") {
-              var shape = "";
-              var color = "";
+            var result = {
+              recognized: ["SPEECH"],
+              text: messaget,
+              nlu: JSON.stringify(data),
+            };
+
+            if (data.intent.name == "help") {
+              result.recognized.push("HELP");
+              var help_option = "";
 
               for (let i = 0; i < data.entities.length; i++) {
-                if (data.entities[i].entity == "shape")
-                  shape = data.entities[i].value
-                    .toUpperCase()
-                    .normalize("NFD")
-                    .replace(/[\u0300-\u036f]/g, "");
-                if (data.entities[i].entity == "color")
-                  color = data.entities[i].value
-                    .toUpperCase()
-                    .normalize("NFD")
-                    .replace(/[\u0300-\u036f]/g, "");
+                if (data.entities[i].entity == "help_option")
+                  if (data.entities[i].value == "pesquisar uma música")
+                    help_option = "SEARCH_MUSIC";
               }
 
-              var message = {
-                intent: "change_color",
-                shape: shape,
-                color: color,
-              };
-              var messaget = btoa(
-                unescape(encodeURIComponent(final_transcript))
-              );
-              var result = {
-                recognized: ["SPEECH", "CHANGE_COLOR"],
-                text: messaget,
-                nlu: message,
-              };
-              if (shape != "") result.recognized.push(shape);
-              if (color != "") result.recognized.push(color);
+              if (help_option != "") result.recognized.push(help_option);
+            } else if (data.intent.name == "search_music") {
+              result.recognized.push("SEARCH_MUSIC");
+            } else if (data.intent.name == "control_music") {
+              result.recognized.push("CONTROL_MUSIC");
+              var operation = "";
 
-              mmiCli_1.sendToIM(
-                new LifeCycleEvent(
-                  "SPEECHIN",
-                  "IM",
-                  "text-1",
-                  "ctx-1"
-                ).doExtensionNotification(
-                  new EMMA("text-", "text", "command", 1, 0).setValue(
-                    JSON.stringify(result)
-                  )
-                )
-              );
+              for (let i = 0; i < data.entities.length; i++) {
+                if (data.entities[i].entity == "action")
+                  if (data.entities[i].value == "pause") {
+                    operation = "PAUSE";
+                  } else if (data.entities[i].value == "resume") {
+                    operation = "RESUME";
+                  }
+              }
+
+              if (operation != "") result.recognized.push(operation);
+            } else if (data.intent.name == "adjust_volume") {
+              result.recognized.push("ADJUST_VOLUME");
+              var operation = "";
+
+              for (let i = 0; i < data.entities.length; i++) {
+                if (data.entities[i].entity == "action")
+                  if (data.entities[i].value == "increase") {
+                    operation = "UP";
+                  } else if (data.entities[i].value == "decrease") {
+                    operation = "DOWN";
+                  }
+              }
+
+              if (operation != "") result.recognized.push(operation);
+            } else if (data.intent.name == "goodbye") {
+              result.recognized.push("GOODBYE");
             }
+
+            mmiCli_1.sendToIM(
+              new LifeCycleEvent(
+                "SPEECHIN",
+                "IM",
+                "text-1",
+                "ctx-1"
+              ).doExtensionNotification(
+                new EMMA("text-", "text", "command", 1, 0).setValue(
+                  JSON.stringify(result)
+                )
+              )
+            );
           }
         );
 
         /*
-    
+
             */
       }
       // sendMMI("mudar para verde o circulo");
