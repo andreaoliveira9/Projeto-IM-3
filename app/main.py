@@ -19,13 +19,17 @@ def process_message(message):
     if message == "OK":
         return message, Type.OK
 
-    json_command = ET.fromstring(message).find(".//command").text
+    commands = ET.fromstring(message).findall(".//command")
+    json_command = commands.pop(0).text
     command = json.loads(json_command)
+    modality = command["recognized"][0]
 
-    if "nlu" in command:
+    if modality == "SPEECH":
         return json.loads(command["nlu"]), Type.SPEECH
-    elif "recognized" in command:
+    elif modality == "GESTURES":
         return command["recognized"][1], Type.GESTURE
+    elif modality == "FUSION":
+        return (command["recognized"][1:], commands), Type.FUSION
 
 
 async def message_handler(youtube_music: YoutubeMusic, message: str):
@@ -37,6 +41,9 @@ async def message_handler(youtube_music: YoutubeMusic, message: str):
         speech_control(youtube_music, message)
     elif typ == Type.GESTURE:
         gesture_control(youtube_music, message)
+    elif typ == Type.FUSION:
+        fusion_control(youtube_music, message)
+
     elif typ == Type.OK:
         return
 
@@ -420,6 +427,10 @@ def gesture_control(youtube_music, message):
             youtube_music.resume()
         else:
             youtube_music.pause()
+
+
+def fusion_control(youtube_music, message):
+    print(f"Fusion received: {message}")
 
 
 async def main():
