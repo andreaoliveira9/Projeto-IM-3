@@ -9,6 +9,7 @@ nlu:
       - Fechar o programa agora.
       - Encerrar a aplicação, obrigado.
       - Fechar o Assistente, adeus.
+      - Sair.
 
   - intent: search_music
     examples: |
@@ -20,6 +21,7 @@ nlu:
       - Preciso ouvir algo da banda [Coldplay](artist), podes pôr?
       - Põe a música [Someone Like You](song) da cantora [Adele](artist).
       - Põe a tocar a música [Shape of You](song) do cantor [Ed Sheeran](artist).
+      - Toca algo do [Michael Jackson](artist).
 
   - intent: play_playlist
     examples: |
@@ -44,6 +46,8 @@ nlu:
       - Quero [continuar](action:resume) a ouvir a música.
       - [Pára](action:pause) a música.
       - Estou a receber uma chamada, [pausa](action:pause) a música.
+      - Pausa(action:pause).
+      - Continua(action:resume).
 
   - synonym: pause
     examples: |
@@ -117,6 +121,97 @@ nlu:
       - O som está [muito baixo](action:increase).
       - A música está [muito alta](action:decrease).
       - O som está [muito alto](action:decrease).
+      - Aumenta(action:increase) dez(value).
+
+  - regex: value
+    examples: |
+      - \d{1,7}
+
+  - synonym: "0"
+    examples: |
+      - zero
+
+  - synonym: "1"
+    examples: |
+      - primeiro
+      - primeira
+      - um
+      - uma
+      - 1ª
+      - 1º
+
+  - synonym: "2"
+    examples: |
+      - segunda
+      - segundo
+      - dois
+      - duas
+      - 2ª
+      - 2º
+
+  - synonym: "3"
+    examples: |
+      - terceira
+      - terceiro
+      - três
+      - 3ª
+      - 3º
+
+  - synonym: "4"
+    examples: |
+      - quarta
+      - quarto
+      - quatro
+      - 4ª
+      - 4º
+
+  - synonym: "5"
+    examples: |
+      - quinta
+      - quinto
+      - cinco
+      - 5ª
+      - 5º
+
+  - synonym: "6"
+    examples: |
+      - sexta
+      - sexto
+      - seis
+      - 6ª
+      - 6º
+
+  - synonym: "7"
+    examples: |
+      - sétima
+      - sétimo
+      - sete
+      - 7ª
+      - 7º
+
+  - synonym: "8"
+    examples: |
+      - oitava
+      - oitavo
+      - oito
+      - 8ª
+      - 8º
+
+  - synonym: "9"
+    examples: |
+      - nona
+      - nono
+      - nove
+      - 9ª
+      - 9º
+
+  - synonym: "10"
+    examples: |
+      - décima
+      - décimo
+      - dez
+      - 10ª
+      - 10º
 
   - synonym: increase
     examples: |
