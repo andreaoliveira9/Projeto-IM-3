@@ -121,6 +121,7 @@ nlu:
       - O som está [muito baixo](action:increase).
       - A música está [muito alta](action:decrease).
       - O som está [muito alto](action:decrease).
+      - Aumenta(action:increase) 10(value).
       - Aumenta(action:increase) dez(value).
 
   - regex: value

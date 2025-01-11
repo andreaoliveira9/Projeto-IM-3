@@ -182,10 +182,6 @@ def speech_control(youtube_music, message):
     confidence = message["intent"]["confidence"]
     entities = message.get("entities", [])
 
-    intent = "wich_music_is_playing"
-    confidence = 1
-    entities = [{"entity": "action", "value": "mute"}]
-
     if intent == "confirm_action":
         if intent_not_undestand_well_voice:
             if message["intent"]["name"] == "confirm_action":
