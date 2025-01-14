@@ -27,14 +27,14 @@ public class GenFusionSCXML {
 
     fg.Complementary(Gestures.SCRATCHHEAD, Speech.HELP_SEARCH_MUSIC, Output.HELP_SEARCH_MUSIC);
     fg.Complementary(Gestures.EARHAND, Speech.VOLUME_UP, Output.VOLUME_UP);
+    fg.Complementary(Gestures.PUSH, Speech.PAUSE, Output.PAUSE);
+    fg.Complementary(Gestures.PUSH, Speech.PLAY, Output.PLAY);
 
     fg.Single(Speech.SEARCH_MUSIC, Output.SEARCH_MUSIC);
     fg.Single(Gestures.MOVEDOWN_RIGHT, Output.MOVEDOWN_RIGHT);
     fg.Single(Gestures.PUSH, Output.PUSH);
     fg.Single(Speech.VOLUME_DOWN, Output.VOLUME_DOWN);
 
-    fg.Redundancy(Gestures.PUSH, Speech.PAUSE, Output.PAUSE);
-    fg.Redundancy(Gestures.PUSH, Speech.PLAY, Output.PLAY);
     fg.Redundancy(Gestures.ARMSX, Speech.QUIT, Output.QUIT);
 
     fg.Build("fusion_novo.scxml");

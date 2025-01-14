@@ -5,7 +5,7 @@ import scxmlgen.interfaces.IModality;
 public enum Gestures implements IModality {
   // Gestures
   SCRATCHHEAD("[GESTURES][SCRATCHHEAD]", 5000),
-  MOVEDOWN_RIGHT("[GESTURES][MOVEDOWN_RIGHT]", 5000),
+  MOVEDOWN_RIGHT("[GESTURES][MOVEDOWNR]", 5000),
   PUSH("[GESTURES][PUSH]", 5000),
   EARHAND("[GESTURES][EARHAND]", 5000),
   ARMSX("[GESTURES][ARMSX]", 5000),
