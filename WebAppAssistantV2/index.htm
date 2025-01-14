@@ -478,8 +478,9 @@
 
               for (let i = 0; i < data.entities.length; i++) {
                 if (data.entities[i].entity == "help_option")
-                  if (data.entities[i].value == "pesquisar uma música")
+                  if (data.entities[i].value.includes("pesquisar")) {
                     help_option = "SEARCH_MUSIC";
+                  }
               }
 
               if (help_option != "") result.recognized.push(help_option);
