@@ -34,6 +34,9 @@ try:
     options.add_argument("--profile-directory=Profile 3")
 
     browser = webdriver.Chrome(options=options)
+    browser.delete_all_cookies()
+    browser.execute_script("window.localStorage.clear();")
+    browser.execute_script("window.sessionStorage.clear();")
     browser.get("https://music.youtube.com/")
 except Exception as e:
     manual_login = True
@@ -67,7 +70,7 @@ class YoutubeMusic:
             self.muted = False
             self.shuffled = False
             self.paused = False
-            self.music_playing = True
+            self.music_playing = False
             self.repeat = 0
             self.explore_selected = None
             self.selected = -1
@@ -92,12 +95,13 @@ class YoutubeMusic:
             self.close()
 
     def sendoToTTS(self, message):
-        actual_volume = self.actual_volume()
+        if self.music_playing:
+            actual_volume = self.actual_volume()
 
-        volume_change = 0
-        if actual_volume > 10 and self.music_playing and not self.paused:
-            volume_change = actual_volume - 10
-            self.decrease_volume_generic(volume_change)
+            volume_change = 0
+            if actual_volume > 10 and not self.paused:
+                volume_change = actual_volume - 10
+                self.decrease_volume_generic(volume_change)
 
         try:
             self.tts(message)
@@ -105,7 +109,7 @@ class YoutubeMusic:
                 len(message) * 0.07
             )  # Simula o tempo de fala baseado no comprimento
         finally:
-            if actual_volume > 10 and self.music_playing:
+            if self.music_playing and actual_volume > 10:
                 self.increase_volume_generic(volume_change)
 
     def perform_login(self):
@@ -1466,6 +1470,32 @@ class YoutubeMusic:
         except Exception as e:
             print(f"Error playing music by link: {e}")
             self.sendoToTTS("Não foi possível reproduzir a música.")
+
+    def find_music_by_lyrics(self, lyrics):
+        try:
+            self.browser.execute_script(
+                "window.open('https://www.chosic.com/find-song-by-lyrics/', '_blank')"
+            )
+            self.browser.switch_to.window(self.browser.window_handles[-1])
+
+            time.sleep(4)
+
+            search_input = self.input.search_music_by_lyrics
+            search_input.send_keys(lyrics)
+            search_input.send_keys(Keys.RETURN)
+
+            time.sleep(4)
+
+            div = self.browser.find_elements(By.CLASS_NAME, "gsc-result")
+            first = div[0].find_element(By.TAG_NAME, "span").text
+
+            artist, song, _ = first.split("-")
+
+            self.sendoToTTS(f"Ótima música! {song} do cantor {artist}.")
+
+        except:
+            self.sendoToTTS("Não foi possível encontrar a música.")
+            return
 
     def help(self, option):
         global LAST_ACTION

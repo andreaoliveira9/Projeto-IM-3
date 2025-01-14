@@ -177,3 +177,9 @@ class Inputs(MapObject):
         return self.find_element(
             "/html/body/div[1]/div[1]/div[2]/c-wiz/div/div[2]/div/div/div/form/span/section[2]/div/div/div[1]/div[1]/div/div/div/div/div[1]/div/div[1]/input"
         )
+
+    @property
+    def search_music_by_lyrics(self):
+        return self.find_element(
+            "/html/body/div[1]/div[1]/div/article/div[1]/div[1]/input"
+        )

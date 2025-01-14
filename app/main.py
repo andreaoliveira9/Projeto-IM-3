@@ -37,6 +37,9 @@ async def message_handler(youtube_music: YoutubeMusic, message: str):
 
     # typ = Type.GESTURE
     # message = "OPENEXPLORE"
+    time.sleep(3)
+    typ = Type.FUSION
+    message = "LLM"
     if typ == Type.SPEECH:
         speech_control(youtube_music, message)
     elif typ == Type.GESTURE:
@@ -427,6 +430,9 @@ def gesture_control(youtube_music, message):
 
 def fusion_control(youtube_music, message):
     print(f"Fusion received: {message}")
+
+    if message == "LLM":
+        youtube_music.find_music_by_lyrics("crescer vai dar tempo")
 
 
 async def main():
