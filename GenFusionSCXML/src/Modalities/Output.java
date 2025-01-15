@@ -12,7 +12,10 @@ public enum Output implements IOutput {
     PAUSE("[FUSION][PAUSE]"),
     PLAY("[FUSION][PLAY]"),
     VOLUME_UP("[FUSION][VOLUME_UP]"),
-    QUIT("[FUSION][QUIT]")
+    QUIT("[FUSION][QUIT]"),
+    SELECT("[FUSION][SELECT]"),
+    NEXT_TRACK("[FUSION][NEXT_TRACK]"),
+    PREVIOUS_TRACK("[FUSION][PREVIOUS_TRACK]")
 
     ;
 

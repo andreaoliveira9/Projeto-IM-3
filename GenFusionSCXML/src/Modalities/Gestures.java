@@ -9,6 +9,8 @@ public enum Gestures implements IModality {
   PUSH("[GESTURES][PUSH]", 5000),
   EARHAND("[GESTURES][EARHAND]", 5000),
   ARMSX("[GESTURES][ARMSX]", 5000),
+  MOVERIGHT("[GESTURES][MOVERIGHT]", 5000),
+  MOVELEFT("[GESTURES][MOVELEFT]", 5000)
 
   ;
 

@@ -319,6 +319,11 @@ nlu:
       - Não, [nega](action:cancel) a ação.
       - [Não](action:cancel).
 
+  - intent: select
+    examples: |
+      - Quero esta.
+      - Toca esta.
+
   - intent: add_music_to_queue
     examples: |
       - Adiciona a música [Dance Monkey](song) de [Tones and I](artist) à fila.
@@ -355,6 +360,7 @@ nlu:
       - Que interações posso fazer
       - Preciso de ajuda
       - Explica-me [todas](help_option) as opções
+      - Não sei como [pesquisar uma música](help_option)
       - Ajuda com [pesquisar uma música](help_option)
       - Ajuda como [tocar uma playlist](help_option)
       - Ajuda como [pesquisar uma música](help_option)

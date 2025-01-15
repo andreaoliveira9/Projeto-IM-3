@@ -288,7 +288,7 @@
       const SpeechRecognition =
         window.SpeechRecognition || window.webkitSpeechRecognition;
       const recognition = new SpeechRecognition();
-      recognition.continuous = true;
+      recognition.continuous = false;
       recognition.interimResults = true;
       recognition.lang = "pt-PT";
 
@@ -516,6 +516,22 @@
               if (operation != "") result.recognized.push(operation);
             } else if (data.intent.name == "goodbye") {
               result.recognized.push("GOODBYE");
+            } else if (data.intent.name == "change_track") {
+              result.recognized.push("CHANGE_TRACK");
+              var operation = "";
+
+              for (let i = 0; i < data.entities.length; i++) {
+                if (data.entities[i].entity == "track")
+                  if (data.entities[i].value == "next") {
+                    operation = "NEXT";
+                  } else if (data.entities[i].value == "previous") {
+                    operation = "PREVIOUS";
+                  }
+              }
+
+              if (operation != "") result.recognized.push(operation);
+            } else if (data.intent.name == "select") {
+              result.recognized.push("SELECT");
             }
 
             mmiCli_1.sendToIM(
