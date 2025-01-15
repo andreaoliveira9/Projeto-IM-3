@@ -1445,6 +1445,115 @@ class YoutubeMusic:
         except:
             self.sendoToTTS("Não foi possível mover para cima.")
 
+    def search_music_list(self, text):
+        global LAST_ACTION
+        try:
+            self.browser.get("https://music.youtube.com/")
+            self.music_playing = False
+
+            search_input = self.input.search
+            search_input.clear()
+            search_input.send_keys(f"{text}")
+            search_input.send_keys(Keys.RETURN)
+
+            time.sleep(1)
+            self.button.show_all_musics.click()
+            self.selected = 0
+            time.sleep(1)
+
+            songs = self.browser.find_elements(By.TAG_NAME, "ytmusic-responsive-list-item-renderer")
+            self.current_selected_category = songs[self.selected]#.find_element(By.XPATH, ".//div")
+            self.browser.execute_script(
+                """
+                    arguments[0].style.border = '2px solid red';
+                    """,
+                self.current_selected_category,
+            )
+
+
+            self.button_selected = self.current_selected_category.find_element(By.ID, "play-button").find_element(By.XPATH, ".//div")
+            LAST_ACTION = "search_music_list"
+        except:
+            self.sendoToTTS("Não foi possível encontrar a música.")
+
+    def move_down_music_list(self):
+        global LAST_ACTION
+        if not self.browser.current_url.startswith("https://music.youtube.com/search"):
+            self.sendoToTTS("Não é possível mover para baixo nesta página.")
+            return
+        
+        try:
+            songs = self.browser.find_elements(By.TAG_NAME, "ytmusic-responsive-list-item-renderer")
+
+            if self.selected + 1 > len(songs) - 1:
+                self.sendoToTTS("Não há mais músicas abaixo.")
+                return
+            
+            if self.current_selected_category:
+                self.browser.execute_script(
+                    """
+                    arguments[0].style.border = '';
+                    """,
+                    self.current_selected_category,
+                )
+
+            self.selected += 1
+            self.current_selected_category = songs[self.selected]#.find_element(By.XPATH, ".//div")
+
+            self.browser.execute_script(
+                """
+                    arguments[0].style.border = '2px solid red';
+                    """,
+                self.current_selected_category,
+            )
+            # actions = ActionChains(self.browser)
+            # actions.move_to_element(self.current_selected_category).perform()
+            self.button_selected = self.current_selected_category.find_element(By.ID, "play-button").find_element(By.XPATH, ".//div")
+
+            LAST_ACTION = "move_down_music_list"
+
+        except:
+            self.sendoToTTS("Não foi possível mover para baixo.")
+
+    def move_up_music_list(self):
+        global LAST_ACTION
+        if not self.browser.current_url.startswith("https://music.youtube.com/search"):
+            self.sendoToTTS("Não é possível mover para baixo nesta página.")
+            return
+        
+        try:
+            songs = self.browser.find_elements(By.TAG_NAME, "ytmusic-responsive-list-item-renderer")
+
+            if self.selected - 1 < 0:
+                self.sendoToTTS("Não há mais músicas acima.")
+                return
+            
+            if self.current_selected_category:
+                self.browser.execute_script(
+                    """
+                    arguments[0].style.border = '';
+                    """,
+                    self.current_selected_category,
+                )
+
+            self.selected -= 1
+            self.current_selected_category = songs[self.selected]#.find_element(By.XPATH, ".//div")
+
+            self.browser.execute_script(
+                """
+                    arguments[0].style.border = '2px solid red';
+                    """,
+                self.current_selected_category,
+            )
+            # actions = ActionChains(self.browser)
+            # actions.move_to_element(self.current_selected_category).perform()
+            self.button_selected = self.current_selected_category.find_element(By.ID, "play-button").find_element(By.XPATH, ".//div")
+
+            LAST_ACTION = "move_up_music_list"
+
+        except:
+            self.sendoToTTS("Não foi possível mover para baixo.")
+
     def select_something_category(self):
         global LAST_ACTION
         try:

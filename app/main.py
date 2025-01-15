@@ -35,11 +35,10 @@ def process_message(message):
 async def message_handler(youtube_music: YoutubeMusic, message: str):
     message, typ = process_message(message)
 
-    # typ = Type.GESTURE
-    # message = "OPENEXPLORE"
-    time.sleep(3)
-    typ = Type.FUSION
-    message = "LLM"
+    typ = Type.GESTURE
+    message = "SEARCHMUSIC"
+    # typ = Type.FUSION
+    # message = "LLM"
     if typ == Type.SPEECH:
         speech_control(youtube_music, message)
     elif typ == Type.GESTURE:
@@ -50,6 +49,39 @@ async def message_handler(youtube_music: YoutubeMusic, message: str):
     elif typ == Type.OK:
         return
 
+
+    time.sleep(3)
+    for i in range(3):
+        typ = Type.GESTURE
+        message = "TESTEDOWN"
+        if typ == Type.SPEECH:
+            speech_control(youtube_music, message)
+        elif typ == Type.GESTURE:
+            gesture_control(youtube_music, message)
+        elif typ == Type.OK:
+            return
+        time.sleep(1)
+
+    for i in range(2):
+        typ = Type.GESTURE
+        message = "TESTEUP"
+        if typ == Type.SPEECH:
+            speech_control(youtube_music, message)
+        elif typ == Type.GESTURE:
+            gesture_control(youtube_music, message)
+        elif typ == Type.OK:
+            return
+        time.sleep(1)
+    
+    typ = Type.GESTURE
+    message = "PUSH"
+    if typ == Type.SPEECH:
+        speech_control(youtube_music, message)
+    elif typ == Type.GESTURE:
+        gesture_control(youtube_music, message)
+    elif typ == Type.OK:
+        return
+    time.sleep(2)
     """ time.sleep(3)
 
 
@@ -378,6 +410,9 @@ def gesture_control(youtube_music, message):
         or LAST_ACTION == "move_right_category"
         or LAST_ACTION == "move_up_category"
         or LAST_ACTION == "open_explore"
+        or LAST_ACTION == "move_down_music_list"
+        or LAST_ACTION == "move_up_music_list"
+        or LAST_ACTION == "search_music_list"
     )
 
     can_resume = youtube_music.paused and youtube_music.music_playing
@@ -426,6 +461,12 @@ def gesture_control(youtube_music, message):
             youtube_music.resume()
         else:
             youtube_music.pause()
+    elif message == "SEARCHMUSIC":
+        youtube_music.search_music_list("crescer vai dar tempo fado")
+    elif message == "TESTEDOWN":
+        youtube_music.move_down_music_list()
+    elif message == "TESTEUP":
+        youtube_music.move_up_music_list()
 
 
 def fusion_control(youtube_music, message):

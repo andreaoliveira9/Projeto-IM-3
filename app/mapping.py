@@ -87,6 +87,12 @@ class Buttons(MapObject):
         return self.find_element(
             "/html/body/ytmusic-app/ytmusic-app-layout/div[4]/ytmusic-search-page/ytmusic-tabbed-search-results-renderer/div[2]/ytmusic-section-list-renderer/div[2]/ytmusic-shelf-renderer[1]/div[3]/ytmusic-responsive-list-item-renderer[1]/div[1]/ytmusic-item-thumbnail-overlay-renderer/div/ytmusic-play-button-renderer/div"
         )
+    
+    @property
+    def show_all_musics(self):
+        return self.find_element(
+            "/html/body/ytmusic-app/ytmusic-app-layout/div[4]/ytmusic-search-page/ytmusic-tabbed-search-results-renderer/div[2]/ytmusic-section-list-renderer/div[2]/ytmusic-shelf-renderer[1]/div[6]/a/yt-button-shape/button/yt-touch-feedback-shape/div/div[2]"
+        )
 
     @property
     def fisrt_music_options(self):
