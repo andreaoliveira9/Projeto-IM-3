@@ -72,6 +72,7 @@ class YoutubeMusic:
             self.paused = False
             self.music_playing = False
             self.repeat = 0
+            self.volume_change_while_talking = 0
             self.explore_selected = None
             self.selected = -1
             self.button_selected = None
@@ -111,6 +112,19 @@ class YoutubeMusic:
         finally:
             if self.music_playing and actual_volume > 10:
                 self.increase_volume_generic(volume_change)
+
+    def decrease_volume_while_talking(self):
+        if self.music_playing:
+            actual_volume = self.actual_volume()
+
+            if actual_volume > 10 and not self.paused:
+                self.volume_change_while_talking = actual_volume - 10
+                self.decrease_volume_generic(self.volume_change_while_talking)
+
+    def increase_volume_after_talking(self):
+        if self.music_playing and self.volume_change_while_talking > 0:
+            self.increase_volume_generic(self.volume_change_while_talking)
+            self.volume_change_while_talking = 0
 
     def perform_login(self):
         try:
@@ -1462,11 +1476,16 @@ class YoutubeMusic:
             self.selected = 0
             time.sleep(1)
 
-            songs = self.browser.find_elements(By.XPATH, "/html/body/ytmusic-app/ytmusic-app-layout/div[4]/ytmusic-search-page/ytmusic-tabbed-search-results-renderer/div[2]/ytmusic-section-list-renderer/div[2]/ytmusic-shelf-renderer/div[3]/ytmusic-responsive-list-item-renderer")
+            songs = self.browser.find_elements(
+                By.XPATH,
+                "/html/body/ytmusic-app/ytmusic-app-layout/div[4]/ytmusic-search-page/ytmusic-tabbed-search-results-renderer/div[2]/ytmusic-section-list-renderer/div[2]/ytmusic-shelf-renderer/div[3]/ytmusic-responsive-list-item-renderer",
+            )
             # /html/body/ytmusic-app/ytmusic-app-layout/div[4]/ytmusic-search-page/ytmusic-tabbed-search-results-renderer/div[2]/ytmusic-section-list-renderer/div[2]/ytmusic-shelf-renderer/div[3]/ytmusic-responsive-list-item-renderer[1]
             # /html/body/ytmusic-app/ytmusic-app-layout/div[4]/ytmusic-search-page/ytmusic-tabbed-search-results-renderer/div[2]/ytmusic-section-list-renderer/div[2]/ytmusic-shelf-renderer/div[3]/ytmusic-responsive-list-item-renderer[2]
             print(len(songs))
-            self.current_selected_category = songs[self.selected]#.find_element(By.XPATH, ".//div")
+            self.current_selected_category = songs[
+                self.selected
+            ]  # .find_element(By.XPATH, ".//div")
             print(self.current_selected_category)
             print(self.current_selected_category.text)
             self.browser.execute_script(
@@ -1476,8 +1495,9 @@ class YoutubeMusic:
                 self.current_selected_category,
             )
 
-
-            self.button_selected = self.current_selected_category.find_element(By.ID, "play-button").find_element(By.XPATH, ".//div")
+            self.button_selected = self.current_selected_category.find_element(
+                By.ID, "play-button"
+            ).find_element(By.XPATH, ".//div")
             LAST_ACTION = "search_music_list"
         except:
             self.sendoToTTS("Não foi possível encontrar a música.")
@@ -1490,7 +1510,10 @@ class YoutubeMusic:
 
         try:
             # Find all elements with the class 'ytmusic-shelf-renderer'
-            songs = self.browser.find_elements(By.XPATH, "/html/body/ytmusic-app/ytmusic-app-layout/div[4]/ytmusic-search-page/ytmusic-tabbed-search-results-renderer/div[2]/ytmusic-section-list-renderer/div[2]/ytmusic-shelf-renderer/div[3]/ytmusic-responsive-list-item-renderer")
+            songs = self.browser.find_elements(
+                By.XPATH,
+                "/html/body/ytmusic-app/ytmusic-app-layout/div[4]/ytmusic-search-page/ytmusic-tabbed-search-results-renderer/div[2]/ytmusic-section-list-renderer/div[2]/ytmusic-shelf-renderer/div[3]/ytmusic-responsive-list-item-renderer",
+            )
             print(len(songs))
             print(songs[0].text)
             if self.selected + 1 > len(songs) - 1:
@@ -1506,7 +1529,9 @@ class YoutubeMusic:
                 )
 
             self.selected += 1
-            self.current_selected_category = songs[self.selected]#.find_element(By.XPATH, ".//div")
+            self.current_selected_category = songs[
+                self.selected
+            ]  # .find_element(By.XPATH, ".//div")
 
             self.browser.execute_script(
                 """
@@ -1516,7 +1541,9 @@ class YoutubeMusic:
             )
             # actions = ActionChains(self.browser)
             # actions.move_to_element(self.current_selected_category).perform()
-            self.button_selected = self.current_selected_category.find_element(By.ID, "play-button").find_element(By.XPATH, ".//div")
+            self.button_selected = self.current_selected_category.find_element(
+                By.ID, "play-button"
+            ).find_element(By.XPATH, ".//div")
 
             LAST_ACTION = "move_down_music_list"
 
@@ -1530,12 +1557,15 @@ class YoutubeMusic:
             return
 
         try:
-            songs = self.browser.find_elements(By.XPATH, "/html/body/ytmusic-app/ytmusic-app-layout/div[4]/ytmusic-search-page/ytmusic-tabbed-search-results-renderer/div[2]/ytmusic-section-list-renderer/div[2]/ytmusic-shelf-renderer/div[3]/ytmusic-responsive-list-item-renderer")
+            songs = self.browser.find_elements(
+                By.XPATH,
+                "/html/body/ytmusic-app/ytmusic-app-layout/div[4]/ytmusic-search-page/ytmusic-tabbed-search-results-renderer/div[2]/ytmusic-section-list-renderer/div[2]/ytmusic-shelf-renderer/div[3]/ytmusic-responsive-list-item-renderer",
+            )
 
             if self.selected - 1 < 0:
                 self.sendoToTTS("Não há mais músicas acima.")
                 return
-            
+
             if self.current_selected_category:
                 self.browser.execute_script(
                     """
@@ -1545,7 +1575,9 @@ class YoutubeMusic:
                 )
 
             self.selected -= 1
-            self.current_selected_category = songs[self.selected]#.find_element(By.XPATH, ".//div")
+            self.current_selected_category = songs[
+                self.selected
+            ]  # .find_element(By.XPATH, ".//div")
 
             self.browser.execute_script(
                 """
@@ -1555,7 +1587,9 @@ class YoutubeMusic:
             )
             # actions = ActionChains(self.browser)
             # actions.move_to_element(self.current_selected_category).perform()
-            self.button_selected = self.current_selected_category.find_element(By.ID, "play-button").find_element(By.XPATH, ".//div")
+            self.button_selected = self.current_selected_category.find_element(
+                By.ID, "play-button"
+            ).find_element(By.XPATH, ".//div")
 
             LAST_ACTION = "move_up_music_list"
 
@@ -1617,7 +1651,11 @@ class YoutubeMusic:
     def help(self, option):
         global LAST_ACTION
         if option:
-            if option == "todas" or option == "pesquisar uma música" or option == "SEARCH_MUSIC":
+            if (
+                option == "todas"
+                or option == "pesquisar uma música"
+                or option == "SEARCH_MUSIC"
+            ):
                 self.sendoToTTS(
                     "Para pesquisar uma música, diga, por exemplo, 'Põe a tocar a música Shape of You do cantor Ed Sheeran.'."
                 )

@@ -246,6 +246,7 @@ def speech_control(youtube_music, message):
         return
 
     if intent == "wake_up":  # DONE
+        youtube_music.decrease_volume_while_talking()
         youtube_music.sendoToTTS("Olá, em que posso ajudar?")
 
     elif intent == "cancel_action":  # DONE
@@ -405,6 +406,8 @@ def speech_control(youtube_music, message):
 
     else:
         youtube_music.sendoToTTS(random_not_understand())
+
+    youtube_music.increase_volume_after_talking()
 
 
 def gesture_control(youtube_music, message):
