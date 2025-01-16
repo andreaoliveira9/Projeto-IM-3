@@ -20,6 +20,7 @@ public enum Output implements IOutput {
     EARHAND("[GESTURES][EARHAND]"),
     MOVERIGHT("[GESTURES][MOVERIGHT]"),
     MOVELEFT("[GESTURES][MOVELEFT]"),
+    MOVEUP_RIGHT("[FUSION][MOVEUP_RIGHT]"),
 
     ;
 
