@@ -38,6 +38,7 @@ public class GenFusionSCXML {
     fg.Single(Gestures.MOVELEFT, Output.MOVELEFT);
     fg.Single(Gestures.MOVEDOWN_RIGHT, Output.MOVEDOWN_RIGHT);
     fg.Single(Gestures.MOVEUP_RIGHT, Output.MOVEUP_RIGHT);
+    fg.Single(Speech.VOLUME_DOWN, Output.VOLUME_DOWN);
 
     fg.Redundancy(Gestures.MOVERIGHT, Speech.NEXT_TRACK, Output.NEXT_TRACK);
     fg.Redundancy(Gestures.MOVELEFT, Speech.PREVIOUS_TRACK, Output.PREVIOUS_TRACK);

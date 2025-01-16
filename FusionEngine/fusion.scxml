@@ -20,11 +20,12 @@
     <transition target="sspeech[speech][control_music][resume]" event="[SPEECH][CONTROL_MUSIC][RESUME]" />
     <transition target="sgestures[gestures][armsx]" event="[GESTURES][ARMSX]" />
     <transition target="sspeech[speech][change_track][next]" event="[SPEECH][CHANGE_TRACK][NEXT]" />
-    <transition target="sspeech[speech][change_track][previous]" event="[SPEECH][CHANGE_TRACK][PREVIOUS]" />
+    <transition target="sspeech[speech][adjust_volume][down]" event="[SPEECH][ADJUST_VOLUME][DOWN]" />
     <transition target="sgestures[gestures][scratchhead]" event="[GESTURES][SCRATCHHEAD]" />
     <transition target="sspeech[speech][help][search_music]" event="[SPEECH][HELP][SEARCH_MUSIC]" />
     <transition target="sgestures[gestures][moveupr]" event="[GESTURES][MOVEUPR]" />
     <transition target="sgestures[gestures][moveright]" event="[GESTURES][MOVERIGHT]" />
+    <transition target="sspeech[speech][change_track][previous]" event="[SPEECH][CHANGE_TRACK][PREVIOUS]" />
     <transition target="sgestures[gestures][push]" event="[GESTURES][PUSH]" />
     <transition target="sgestures[gestures][earhand]" event="[GESTURES][EARHAND]" />
     <transition target="sgestures[gestures][moveleft]" event="[GESTURES][MOVELEFT]" />
@@ -165,32 +166,22 @@
     </onentry>
     <transition target="main" />
   </state>
-  <state id="sspeech[speech][change_track][previous]">
+  <state id="sspeech[speech][adjust_volume][down]">
     <onentry>
-      <log label="[sspeech[speech][change_track][previous]]" expr="READY" />
+      <log label="[sspeech[speech][adjust_volume][down]]" expr="READY" />
       <assign name="data1" expr="${_eventdata.data}" />
-      <send id="state1-timer-sspeech[speech][change_track][previous]" event="timeout-sspeech[speech][change_track][previous]" delay="5000" target="" targettype="" namelist="" />
+      <send id="state1-timer-sspeech[speech][adjust_volume][down]" event="timeout-sspeech[speech][adjust_volume][down]" delay="0" target="" targettype="" namelist="" />
     </onentry>
-    <transition target="speech[speech][change_track][previous]-final" event="timeout-sspeech[speech][change_track][previous]" />
-    <transition target="sspeech[speech][change_track][previous]-gestures[gestures][moveleft]" event="[GESTURES][MOVELEFT]" />
+    <transition target="speech[speech][adjust_volume][down]-final" event="timeout-sspeech[speech][adjust_volume][down]" />
     <onexit>
-      <cancel sendid="state1-timer-sspeech[speech][change_track][previous]" />
+      <cancel sendid="state1-timer-sspeech[speech][adjust_volume][down]" />
     </onexit>
   </state>
-  <state id="speech[speech][change_track][previous]-final">
+  <state id="speech[speech][adjust_volume][down]-final">
     <onentry>
-      <log label="[speech[speech][change_track][previous]-final]" expr="READY" />
-      <commons:var name="newExtensionNotification" expr="${mmi:newExtensionNotificationF2(contextId, 'FUSION', 'IM', mmi:newRequestId(contextId), null, data1, '[FUSION][PREVIOUS_TRACK]')}" />
-      <send event="PREVIOUS_TRACK" target="IM" targettype="MC" namelist="newExtensionNotification" />
-    </onentry>
-    <transition target="main" />
-  </state>
-  <state id="sspeech[speech][change_track][previous]-gestures[gestures][moveleft]">
-    <onentry>
-      <log label="[sspeech[speech][change_track][previous]-gestures[gestures][moveleft]]" expr="READY" />
-      <assign name="data2" expr="${_eventdata.data}" />
-      <commons:var name="newExtensionNotification" expr="${mmi:newExtensionNotificationF(contextId, 'FUSION', 'IM', mmi:newRequestId(contextId), null, data1,data2, '[FUSION][PREVIOUS_TRACK]')}" />
-      <send event="PREVIOUS_TRACK" target="IM" targettype="MC" namelist="newExtensionNotification" />
+      <log label="[speech[speech][adjust_volume][down]-final]" expr="READY" />
+      <commons:var name="newExtensionNotification" expr="${mmi:newExtensionNotificationF2(contextId, 'FUSION', 'IM', mmi:newRequestId(contextId), null, data1, '[FUSION][VOLUME_DOWN]')}" />
+      <send event="VOLUME_DOWN" target="IM" targettype="MC" namelist="newExtensionNotification" />
     </onentry>
     <transition target="main" />
   </state>
@@ -289,6 +280,35 @@
       <assign name="data2" expr="${_eventdata.data}" />
       <commons:var name="newExtensionNotification" expr="${mmi:newExtensionNotificationF(contextId, 'FUSION', 'IM', mmi:newRequestId(contextId), null, data1,data2, '[FUSION][NEXT_TRACK]')}" />
       <send event="NEXT_TRACK" target="IM" targettype="MC" namelist="newExtensionNotification" />
+    </onentry>
+    <transition target="main" />
+  </state>
+  <state id="sspeech[speech][change_track][previous]">
+    <onentry>
+      <log label="[sspeech[speech][change_track][previous]]" expr="READY" />
+      <assign name="data1" expr="${_eventdata.data}" />
+      <send id="state1-timer-sspeech[speech][change_track][previous]" event="timeout-sspeech[speech][change_track][previous]" delay="5000" target="" targettype="" namelist="" />
+    </onentry>
+    <transition target="speech[speech][change_track][previous]-final" event="timeout-sspeech[speech][change_track][previous]" />
+    <transition target="sspeech[speech][change_track][previous]-gestures[gestures][moveleft]" event="[GESTURES][MOVELEFT]" />
+    <onexit>
+      <cancel sendid="state1-timer-sspeech[speech][change_track][previous]" />
+    </onexit>
+  </state>
+  <state id="speech[speech][change_track][previous]-final">
+    <onentry>
+      <log label="[speech[speech][change_track][previous]-final]" expr="READY" />
+      <commons:var name="newExtensionNotification" expr="${mmi:newExtensionNotificationF2(contextId, 'FUSION', 'IM', mmi:newRequestId(contextId), null, data1, '[FUSION][PREVIOUS_TRACK]')}" />
+      <send event="PREVIOUS_TRACK" target="IM" targettype="MC" namelist="newExtensionNotification" />
+    </onentry>
+    <transition target="main" />
+  </state>
+  <state id="sspeech[speech][change_track][previous]-gestures[gestures][moveleft]">
+    <onentry>
+      <log label="[sspeech[speech][change_track][previous]-gestures[gestures][moveleft]]" expr="READY" />
+      <assign name="data2" expr="${_eventdata.data}" />
+      <commons:var name="newExtensionNotification" expr="${mmi:newExtensionNotificationF(contextId, 'FUSION', 'IM', mmi:newRequestId(contextId), null, data1,data2, '[FUSION][PREVIOUS_TRACK]')}" />
+      <send event="PREVIOUS_TRACK" target="IM" targettype="MC" namelist="newExtensionNotification" />
     </onentry>
     <transition target="main" />
   </state>
