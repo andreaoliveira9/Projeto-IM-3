@@ -234,9 +234,13 @@ def speech_control(youtube_music, message):
                 youtube_music.sendoToTTS("Ok, não vou fazer nada.")
             else:
                 youtube_music.sendoToTTS("Não entendi o que disseste.")
+                wainting = True
+                youtube_music.decrease_volume_while_talking()
                 return
         else:
             youtube_music.sendoToTTS(random_not_understand())
+            wainting = True
+            youtube_music.decrease_volume_while_talking()
             return
 
         intent_not_undestand_well_voice = None
@@ -244,10 +248,14 @@ def speech_control(youtube_music, message):
 
     if confidence <= 0.45:
         youtube_music.sendoToTTS(random_not_understand())
+        wainting = True
+        youtube_music.decrease_volume_while_talking()
         return
     elif confidence > 0.45 and confidence < 0.8:
         intent_not_undestand_well_voice = IntentNotUnderstoodWellVoice(intent, entities)
         youtube_music.sendoToTTS(intent_not_undestand_well_voice.confirmation())
+        wainting = True
+        youtube_music.decrease_volume_while_talking()
         return
 
     if intent == "wake_up":  # DONE
@@ -256,6 +264,7 @@ def speech_control(youtube_music, message):
         youtube_music.sendoToTTS("Olá, em que posso ajudar?")
 
     elif intent == "cancel_action":  # DONE
+        wainting = False
         youtube_music.sendoToTTS("Ok, atá já.")
 
     elif intent == "find_music":  # DONE
@@ -289,6 +298,8 @@ def speech_control(youtube_music, message):
             youtube_music.sendoToTTS(
                 "Não percebi se queres passar para a póxima música, ir para a anterior ou repetir esta música."
             )
+            youtube_music.decrease_volume_while_talking()
+            wainting = True
 
     elif intent == "adjust_volume":  # DONE
         action = next((e["value"] for e in entities if e["entity"] == "action"), None)
@@ -304,6 +315,8 @@ def speech_control(youtube_music, message):
             youtube_music.sendoToTTS(
                 "Não percebi de queres aumentar, diminuir, desloigar ou ligar o som."
             )
+            youtube_music.decrease_volume_while_talking()
+            wainting = True
 
     elif intent == "set_mode":  # DONE
         mode = next((e["value"] for e in entities if e["entity"] == "mode"), None)
@@ -319,6 +332,8 @@ def speech_control(youtube_music, message):
             youtube_music.repeat_off()
         else:
             youtube_music.sendoToTTS("Não percebi qual o modo queres colocar.")
+            youtube_music.decrease_volume_while_talking()
+            wainting = True
 
     elif intent == "add_to_favorites":  # DONE
         youtube_music.like_music()
@@ -337,6 +352,8 @@ def speech_control(youtube_music, message):
                 youtube_music.sendoToTTS("Não percebi o nome da música.")
             elif not artist:
                 youtube_music.sendoToTTS("Não percebi o nome do artista.")
+            youtube_music.decrease_volume_while_talking()
+            wainting = True
 
     elif intent == "add_music_to_queue":  # DONE
         song = next((e["value"] for e in entities if e["entity"] == "song"), None)
@@ -352,6 +369,8 @@ def speech_control(youtube_music, message):
                 youtube_music.sendoToTTS("Não percebi o nome da música.")
             elif not artist:
                 youtube_music.sendoToTTS("Não percebi o nome do artista.")
+            youtube_music.decrease_volume_while_talking()
+            wainting = True
 
     elif intent == "wich_music_is_playing":  # DONE
         youtube_music.get_current_music()
@@ -365,6 +384,8 @@ def speech_control(youtube_music, message):
             youtube_music.play_playlist(playlist)
         else:
             youtube_music.sendoToTTS("Não percebi o nome da playlist.")
+            youtube_music.decrease_volume_while_talking()
+            wainting = True
 
     elif intent == "add_music_to_playlist_search":  # DONE
         song = next((e["value"] for e in entities if e["entity"] == "song"), None)
@@ -393,6 +414,8 @@ def speech_control(youtube_music, message):
                 youtube_music.sendoToTTS("Não percebi o nome do artista.")
             elif not playlist:
                 youtube_music.sendoToTTS("Não percebi o nome da playlist.")
+            youtube_music.decrease_volume_while_talking()
+            wainting = True
 
     elif intent == "help":  # DONE
         option = next(
@@ -412,7 +435,8 @@ def speech_control(youtube_music, message):
 
     else:
         youtube_music.sendoToTTS(random_not_understand())
-
+        wainting = True
+        youtube_music.decrease_volume_while_talking()
 
 def gesture_control(youtube_music, message):
     global gesture_confirmation, wainting
@@ -443,7 +467,11 @@ def gesture_control(youtube_music, message):
     if gesture_confirmation and message != gesture_confirmation:
         gesture_confirmation = None
 
-    if message == "ARMSX":  # Acenar com a mão para sair
+    if message == "CLOSEHAND":  # Acenar com a mão para sair
+        youtube_music.decrease_volume_while_talking()
+        wainting = True
+        youtube_music.sendoToTTS("Olá, em que posso ajudar?")
+    elif message == "ARMSX":  # Acenar com a mão para sair
         global not_quit
         if gesture_confirmation == "ARMSX":
             not_quit = False
