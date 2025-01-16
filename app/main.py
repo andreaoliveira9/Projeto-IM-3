@@ -13,7 +13,7 @@ HOST = "127.0.0.1"
 not_quit = True
 intent_not_undestand_well_voice = None
 gesture_confirmation = None
-
+wainting = False
 
 def process_message(message):
     if message == "OK":
@@ -209,7 +209,11 @@ async def message_handler(youtube_music: YoutubeMusic, message: str):
 
 
 def speech_control(youtube_music, message):
-    global intent_not_undestand_well_voice
+    global intent_not_undestand_well_voice, wainting
+    if wainting:
+        wainting = False
+        youtube_music.increase_volume_after_talking()
+
     print(f"Speech received: {message}")
 
     intent = message["intent"]["name"]
@@ -221,6 +225,7 @@ def speech_control(youtube_music, message):
             action = next(
                 (e["value"] for e in entities if e["entity"] == "action"), None
             )
+
             if action == "comfirm":
                 intent = intent_not_undestand_well_voice.intent
                 entities = intent_not_undestand_well_voice.entities
@@ -247,6 +252,7 @@ def speech_control(youtube_music, message):
 
     if intent == "wake_up":  # DONE
         youtube_music.decrease_volume_while_talking()
+        wainting = True
         youtube_music.sendoToTTS("Olá, em que posso ajudar?")
 
     elif intent == "cancel_action":  # DONE
@@ -256,7 +262,7 @@ def speech_control(youtube_music, message):
         youtube_music.sendoToTTS("Vou tentar encontrar a música.")
         youtube_music.find_music_by_lyrics("crescer vai dar tempo")
 
-    if intent == "control_music":  # DONE
+    elif intent == "control_music":  # DONE
         # Pausar ou continuar
         action = next((e["value"] for e in entities if e["entity"] == "action"), None)
         if action == "pause":
@@ -407,11 +413,14 @@ def speech_control(youtube_music, message):
     else:
         youtube_music.sendoToTTS(random_not_understand())
 
-    youtube_music.increase_volume_after_talking()
-
 
 def gesture_control(youtube_music, message):
-    global gesture_confirmation
+    global gesture_confirmation, wainting
+
+    if wainting:
+        wainting = False
+        youtube_music.increase_volume_after_talking()
+
     from youtube_music import LAST_ACTION
 
     print(f"Gesture received: {message}")
@@ -481,9 +490,16 @@ def gesture_control(youtube_music, message):
         youtube_music.move_down_music_list()
     elif message == "TESTEUP":
         youtube_music.move_up_music_list()
+    
+    
 
 
 def fusion_control(youtube_music, message):
+    global wainting
+    if wainting:
+        wainting = False
+        youtube_music.increase_volume_after_talking()
+        
     print(f"Fusion received: {message}")
     command = message[0][0]
 
@@ -516,6 +532,7 @@ def fusion_control(youtube_music, message):
 
 
 async def main():
+    global wainting
     tts = TTS(FusionAdd=f"https://{HOST}:8000/IM/USER1/APPSPEECH").sendToVoice
     youtube_music = YoutubeMusic(
         TTS=tts
@@ -535,6 +552,7 @@ async def main():
             try:
                 msg = await websocket.recv()
                 await message_handler(youtube_music=youtube_music, message=msg)
+                
             except Exception as e:
                 tts("Ocorreu um erro, a fechar o aplicativo")
                 print(f"Error: {e}")
