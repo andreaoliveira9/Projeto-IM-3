@@ -245,6 +245,16 @@ def speech_control(youtube_music, message):
         youtube_music.sendoToTTS(intent_not_undestand_well_voice.confirmation())
         return
 
+    if intent == "wake_up":  # DONE
+        youtube_music.sendoToTTS("Olá, em que posso ajudar?")
+
+    elif intent == "cancel_action":  # DONE
+        youtube_music.sendoToTTS("Ok, atá já.")
+
+    elif intent == "find_music":  # DONE
+        youtube_music.sendoToTTS("Vou tentar encontrar a música.")
+        youtube_music.find_music_by_lyrics("crescer vai dar tempo")
+
     if intent == "control_music":  # DONE
         # Pausar ou continuar
         action = next((e["value"] for e in entities if e["entity"] == "action"), None)
