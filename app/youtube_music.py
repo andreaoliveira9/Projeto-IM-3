@@ -1462,8 +1462,13 @@ class YoutubeMusic:
             self.selected = 0
             time.sleep(1)
 
-            songs = self.browser.find_elements(By.TAG_NAME, "ytmusic-responsive-list-item-renderer")
+            songs = self.browser.find_elements(By.XPATH, "/html/body/ytmusic-app/ytmusic-app-layout/div[4]/ytmusic-search-page/ytmusic-tabbed-search-results-renderer/div[2]/ytmusic-section-list-renderer/div[2]/ytmusic-shelf-renderer/div[3]/ytmusic-responsive-list-item-renderer")
+            # /html/body/ytmusic-app/ytmusic-app-layout/div[4]/ytmusic-search-page/ytmusic-tabbed-search-results-renderer/div[2]/ytmusic-section-list-renderer/div[2]/ytmusic-shelf-renderer/div[3]/ytmusic-responsive-list-item-renderer[1]
+            # /html/body/ytmusic-app/ytmusic-app-layout/div[4]/ytmusic-search-page/ytmusic-tabbed-search-results-renderer/div[2]/ytmusic-section-list-renderer/div[2]/ytmusic-shelf-renderer/div[3]/ytmusic-responsive-list-item-renderer[2]
+            print(len(songs))
             self.current_selected_category = songs[self.selected]#.find_element(By.XPATH, ".//div")
+            print(self.current_selected_category)
+            print(self.current_selected_category.text)
             self.browser.execute_script(
                 """
                     arguments[0].style.border = '2px solid red';
@@ -1482,14 +1487,16 @@ class YoutubeMusic:
         if not self.browser.current_url.startswith("https://music.youtube.com/search"):
             self.sendoToTTS("Não é possível mover para baixo nesta página.")
             return
-        
-        try:
-            songs = self.browser.find_elements(By.TAG_NAME, "ytmusic-responsive-list-item-renderer")
 
+        try:
+            # Find all elements with the class 'ytmusic-shelf-renderer'
+            songs = self.browser.find_elements(By.XPATH, "/html/body/ytmusic-app/ytmusic-app-layout/div[4]/ytmusic-search-page/ytmusic-tabbed-search-results-renderer/div[2]/ytmusic-section-list-renderer/div[2]/ytmusic-shelf-renderer/div[3]/ytmusic-responsive-list-item-renderer")
+            print(len(songs))
+            print(songs[0].text)
             if self.selected + 1 > len(songs) - 1:
                 self.sendoToTTS("Não há mais músicas abaixo.")
                 return
-            
+
             if self.current_selected_category:
                 self.browser.execute_script(
                     """
@@ -1521,9 +1528,9 @@ class YoutubeMusic:
         if not self.browser.current_url.startswith("https://music.youtube.com/search"):
             self.sendoToTTS("Não é possível mover para baixo nesta página.")
             return
-        
+
         try:
-            songs = self.browser.find_elements(By.TAG_NAME, "ytmusic-responsive-list-item-renderer")
+            songs = self.browser.find_elements(By.XPATH, "/html/body/ytmusic-app/ytmusic-app-layout/div[4]/ytmusic-search-page/ytmusic-tabbed-search-results-renderer/div[2]/ytmusic-section-list-renderer/div[2]/ytmusic-shelf-renderer/div[3]/ytmusic-responsive-list-item-renderer")
 
             if self.selected - 1 < 0:
                 self.sendoToTTS("Não há mais músicas acima.")

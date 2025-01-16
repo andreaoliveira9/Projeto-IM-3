@@ -10,9 +10,14 @@ Start-Process -FilePath .\GenericGesturesModality.exe
 Set-Location -Path ..\WebAppAssistantV2
 Start-Process -FilePath .\start_web_app.bat
 
+conda activate rasa-env
+Set-Location -Path ..\rasaDemo
+Start-Process -FilePath rasa 'run', '--enable-api', '-m', '.\models\', '--cors', '*'
+
 Set-Location -Path ..
 Start-Sleep -Seconds 3
 Start-Process "msedge.exe" "https://127.0.0.1:8082/index.htm"
+
 
 Set-Location -Path .\app
 .\venv\Scripts\activate
