@@ -216,26 +216,28 @@ def speech_control(youtube_music, message):
     confidence = message["intent"]["confidence"]
     entities = message.get("entities", [])
 
-    if intent == "confirm_action":
+    if intent == "confirm_action" and confidence > 0.7:
         if intent_not_undestand_well_voice:
-            if message["intent"]["name"] == "confirm_action":
-                if (
-                    message["intent"]["confidence"] > 0.7
-                    and message["entities"][0]["value"] == "confirm"
-                ):
-                    intent = intent_not_undestand_well_voice.intent
-                    entities = intent_not_undestand_well_voice.entities
-                    youtube_music.sendoToTTS("Ok, vou fazer o que pediste.")
-                else:
-                    youtube_music.sendoToTTS("Não entendi o que disseste.")
-            else:
+            action = next(
+                (e["value"] for e in entities if e["entity"] == "action"), None
+            )
+            if action == "comfirm":
+                intent = intent_not_undestand_well_voice.intent
+                entities = intent_not_undestand_well_voice.entities
+                youtube_music.sendoToTTS("Ok, vou fazer o que pediste.")
+            elif action == "cancel":
                 youtube_music.sendoToTTS("Ok, não vou fazer nada.")
-
-            intent_not_undestand_well_voice = None
+            else:
+                youtube_music.sendoToTTS("Não entendi o que disseste.")
+                return
         else:
             youtube_music.sendoToTTS(random_not_understand())
+            return
 
-    elif confidence <= 0.45:
+        intent_not_undestand_well_voice = None
+        return
+
+    if confidence <= 0.45:
         youtube_music.sendoToTTS(random_not_understand())
         return
     elif confidence > 0.45 and confidence < 0.8:
@@ -471,8 +473,7 @@ def gesture_control(youtube_music, message):
 def fusion_control(youtube_music, message):
     print(f"Fusion received: {message}")
     command = message[0][0]
-    # if message == "LLM":
-    #     youtube_music.find_music_by_lyrics("crescer vai dar tempo")
+
     if command == "QUIT":
         global not_quit
         not_quit = False
@@ -487,20 +488,19 @@ def fusion_control(youtube_music, message):
         youtube_music.select_something_category()
     elif command == "VOLUME_DOWN":
         youtube_music.decrease_volume_generic(30)
-    elif command == "VOLUME_UP": # TODO
+    elif command == "VOLUME_UP":
         for c in message[1]:
             command = json.loads(c.text)
             if command["recognized"][0] == "SPEECH":
                 nlu = json.loads(command["nlu"])
                 for entity in nlu["entities"]:
                     if entity["entity"] == "value":
-                        print(int(entity["value"]))
                         youtube_music.increase_volume_generic(int(entity["value"]))
     elif command == "PAUSE":
         youtube_music.pause()
     elif command == "PLAY":
         youtube_music.resume()
-    
+
 
 async def main():
     tts = TTS(FusionAdd=f"https://{HOST}:8000/IM/USER1/APPSPEECH").sendToVoice
