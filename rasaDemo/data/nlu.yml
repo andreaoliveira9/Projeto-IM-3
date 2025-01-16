@@ -101,6 +101,11 @@ nlu:
       - de novo
       - novamente
 
+  - intent: search_mmusic_by_lyrics
+    examples: |
+      - Qual é a música que tem a letra [crescer vai dar tempo](lyrics)?
+      - Podes encontrar a música que tem a letra [crescer vai dar tempo](lyrics)?
+      
   - intent: adjust_volume
     examples: |
       - Dá para [aumentar](action:increase) o volume, por favor?
@@ -121,8 +126,8 @@ nlu:
       - O som está [muito baixo](action:increase).
       - A música está [muito alta](action:decrease).
       - O som está [muito alto](action:decrease).
-      - Aumenta(action:increase) 10(value).
-      - Aumenta(action:increase) dez(value).
+      - [Aumenta](action:increase) em [10](value).
+      - [Aumenta](action:increase) em [dez](value).
 
   - regex: value
     examples: |
