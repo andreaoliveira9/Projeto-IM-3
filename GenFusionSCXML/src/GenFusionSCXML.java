@@ -32,9 +32,10 @@ public class GenFusionSCXML {
     fg.Complementary(Gestures.PUSH, Speech.SELECT, Output.SELECT);
     fg.Complementary(Gestures.ARMSX, Speech.QUIT, Output.QUIT);
 
-    fg.Single(Speech.SEARCH_MUSIC, Output.SEARCH_MUSIC);
-    fg.Single(Gestures.MOVEDOWN_RIGHT, Output.MOVEDOWN_RIGHT);
-    fg.Single(Speech.VOLUME_DOWN, Output.VOLUME_DOWN);
+    fg.Single(Gestures.EARHAND, Output.EARHAND);
+    fg.Single(Gestures.SCRATCHHEAD, Output.SCRATCHHEAD);
+    fg.Single(Gestures.MOVERIGHT, Output.MOVERIGHT);
+    fg.Single(Gestures.MOVELEFT, Output.MOVELEFT);
 
     fg.Redundancy(Gestures.MOVERIGHT, Speech.NEXT_TRACK, Output.NEXT_TRACK);
     fg.Redundancy(Gestures.MOVELEFT, Speech.PREVIOUS_TRACK, Output.PREVIOUS_TRACK);
