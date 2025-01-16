@@ -1445,8 +1445,9 @@ class YoutubeMusic:
         except:
             self.sendoToTTS("Não foi possível mover para cima.")
 
-    def search_music_list(self, text):
+    def search_music_list(self, song, artist):
         global LAST_ACTION
+        text = f"{song} {artist}"
         try:
             self.browser.get("https://music.youtube.com/")
             self.music_playing = False
@@ -1609,7 +1610,7 @@ class YoutubeMusic:
     def help(self, option):
         global LAST_ACTION
         if option:
-            if option == "todas" or option == "pesquisar uma música":
+            if option == "todas" or option == "pesquisar uma música" or option == "SEARCH_MUSIC":
                 self.sendoToTTS(
                     "Para pesquisar uma música, diga, por exemplo, 'Põe a tocar a música Shape of You do cantor Ed Sheeran.'."
                 )

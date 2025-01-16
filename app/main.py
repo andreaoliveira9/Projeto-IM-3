@@ -276,7 +276,7 @@ def speech_control(youtube_music, message):
         if action == "increase":
             youtube_music.increase_volume_generic(10)
         elif action == "decrease":
-            youtube_music.decrease_volume_generic(10)
+            youtube_music.decrease_volume_generic(30)
         elif action == "mute":
             youtube_music.mute()
         elif action == "unmute":
@@ -309,8 +309,8 @@ def speech_control(youtube_music, message):
         artist = next((e["value"] for e in entities if e["entity"] == "artist"), None)
 
         if song and artist:
-            youtube_music.search_music(song, artist)
-            youtube_music.play_music_searched()
+            youtube_music.search_music_list(song, artist)
+            # youtube_music.play_music_searched()
         else:
             if not song and not artist:
                 youtube_music.sendoToTTS("Não percebi o nome nem o artista.")
@@ -438,9 +438,9 @@ def gesture_control(youtube_music, message):
     elif message == "MOVEDOWNL":  # Mão em pinça para cima
         youtube_music.scroll_down_categories()
     elif message == "MOVEUPR":  # Apontar para cima
-        youtube_music.move_up_category()
+        youtube_music.move_up_music_list()
     elif message == "MOVEDOWNR":  # Apontar para baixo
-        youtube_music.move_down_category()
+        youtube_music.move_down_music_list()
     elif message == "MOVELEFT":
         if is_exploring:
             youtube_music.move_left_category()
@@ -470,10 +470,37 @@ def gesture_control(youtube_music, message):
 
 def fusion_control(youtube_music, message):
     print(f"Fusion received: {message}")
-
-    if message == "LLM":
-        youtube_music.find_music_by_lyrics("crescer vai dar tempo")
-
+    command = message[0][0]
+    # if message == "LLM":
+    #     youtube_music.find_music_by_lyrics("crescer vai dar tempo")
+    if command == "QUIT":
+        global not_quit
+        not_quit = False
+        youtube_music.sendoToTTS("Até à próxima!")
+    elif command == "HELP":
+        youtube_music.help(message[0][1])
+    elif command == "MOVEUP_RIGHT":
+        youtube_music.move_up_music_list()
+    elif command == "MOVEDOWN_RIGHT":
+        youtube_music.move_down_music_list()
+    elif command == "SELECT":
+        youtube_music.select_something_category()
+    elif command == "VOLUME_DOWN":
+        youtube_music.decrease_volume_generic(30)
+    elif command == "VOLUME_UP": # TODO
+        for c in message[1]:
+            command = json.loads(c.text)
+            if command["recognized"][0] == "SPEECH":
+                nlu = json.loads(command["nlu"])
+                for entity in nlu["entities"]:
+                    if entity["entity"] == "value":
+                        print(int(entity["value"]))
+                        youtube_music.increase_volume_generic(int(entity["value"]))
+    elif command == "PAUSE":
+        youtube_music.pause()
+    elif command == "PLAY":
+        youtube_music.resume()
+    
 
 async def main():
     tts = TTS(FusionAdd=f"https://{HOST}:8000/IM/USER1/APPSPEECH").sendToVoice
