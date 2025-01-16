@@ -40,7 +40,7 @@ public class GenFusionSCXML {
     fg.Redundancy(Gestures.MOVERIGHT, Speech.NEXT_TRACK, Output.NEXT_TRACK);
     fg.Redundancy(Gestures.MOVELEFT, Speech.PREVIOUS_TRACK, Output.PREVIOUS_TRACK);
 
-    fg.Build("fusion_novo.scxml");
+    fg.Build("fusion.scxml");
 
   }
 
