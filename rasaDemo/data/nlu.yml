@@ -11,6 +11,24 @@ nlu:
       - Fechar o Assistente, adeus.
       - Sair.
 
+  - intent: wake_up
+    examples: |
+      - Olá, YouTube.
+      - Hey YouTube.
+      - YouTube.
+
+  - intent: cancel_ation
+    examples: |
+      - Cancelar.
+      - Ignorar.
+      - Esquece-
+
+  - intent: find_music
+    examples: |
+      - Qual é a música que tem a letra crescer vai dar tempo para aprender.
+      - Qual é a música que tem a letra "crescer vai dar tempo para aprender"?
+      - Qual é a música que tem a letra crescer vai dar tempo para aprender?
+
   - intent: search_music
     examples: |
       - Quero ouvir a música [Stayin' Alive](song) dos [Bee Gees](artist).
