@@ -263,7 +263,7 @@ def speech_control(youtube_music, message):
         wainting = True
         youtube_music.sendoToTTS("Olá, em que posso ajudar?")
 
-    elif intent == "cancel_action":  # DONE
+    elif intent == "cancel_ation":  # DONE
         wainting = False
         youtube_music.sendoToTTS("Ok, atá já.")
 
@@ -306,7 +306,7 @@ def speech_control(youtube_music, message):
         if action == "increase":
             youtube_music.increase_volume_generic(10)
         elif action == "decrease":
-            youtube_music.decrease_volume_generic(45)
+            youtube_music.decrease_volume_generic(70)
         elif action == "mute":
             youtube_music.mute()
         elif action == "unmute":
