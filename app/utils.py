@@ -161,6 +161,10 @@ class IntentNotUnderstoodWellVoice:
 
         elif self.intent == "goodbye":
             return "Penso que disseste que querias fechar o aplicativo, está certo?"
+        
+        elif self.intent == "search_mmusic_by_lyrics":
+            return "Penso que disseste que querias encontrar a música, está certo?"
+        
+        else:
+            return 
 
-    def __str__(self):
-        return f"Intent: {self.intent}, Entities: {self.entities}"

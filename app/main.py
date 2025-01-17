@@ -226,12 +226,14 @@ def speech_control(youtube_music, message):
                 (e["value"] for e in entities if e["entity"] == "action"), None
             )
 
-            if action == "comfirm":
+            if action == "confirm":
                 intent = intent_not_undestand_well_voice.intent
                 entities = intent_not_undestand_well_voice.entities
                 youtube_music.sendoToTTS("Ok, vou fazer o que pediste.")
             elif action == "cancel":
                 youtube_music.sendoToTTS("Ok, não vou fazer nada.")
+                intent_not_undestand_well_voice = None
+                return
             else:
                 youtube_music.sendoToTTS("Não entendi o que disseste.")
                 wainting = True
@@ -243,8 +245,7 @@ def speech_control(youtube_music, message):
             youtube_music.decrease_volume_while_talking()
             return
 
-        intent_not_undestand_well_voice = None
-        return
+        
 
     if confidence <= 0.45:
         youtube_music.sendoToTTS(random_not_understand())
@@ -267,7 +268,7 @@ def speech_control(youtube_music, message):
         wainting = False
         youtube_music.sendoToTTS("Ok, atá já.")
 
-    elif intent == "find_music":  # DONE
+    elif intent == "search_mmusic_by_lyrics":  # DONE
         youtube_music.sendoToTTS("Vou tentar encontrar a música.")
         youtube_music.find_music_by_lyrics("crescer vai dar tempo")
 
@@ -306,7 +307,7 @@ def speech_control(youtube_music, message):
         if action == "increase":
             youtube_music.increase_volume_generic(10)
         elif action == "decrease":
-            youtube_music.decrease_volume_generic(30)
+            youtube_music.decrease_volume_generic(45)
         elif action == "mute":
             youtube_music.mute()
         elif action == "unmute":

@@ -32,6 +32,7 @@ try:
     options.add_argument("--start-maximized")
     options.add_argument(f"--user-data-dir={user_data_dir}")
     options.add_argument("--profile-directory=Profile 3")
+    options.add_argument("--disable-popup-blocking")
 
     browser = webdriver.Chrome(options=options)
     browser.delete_all_cookies()
@@ -64,7 +65,9 @@ class YoutubeMusic:
             if not manual_login:
                 self.browser = browser
             else:
-                self.browser = uc.Chrome()
+                options = Options()
+                options.add_argument("--disable-popup-blocking")
+                self.browser = uc.Chrome(options=options)
                 self.browser.get("https://music.youtube.com/")
                 self.browser.maximize_window()
             self.muted = False
@@ -1624,9 +1627,7 @@ class YoutubeMusic:
 
     def find_music_by_lyrics(self, lyrics):
         try:
-            self.browser.execute_script(
-                "window.open('https://www.chosic.com/find-song-by-lyrics/', '_blank')"
-            )
+            self.browser.execute_script("window.open('https://www.chosic.com/find-song-by-lyrics/', '_blank');")
             self.browser.switch_to.window(self.browser.window_handles[-1])
 
             time.sleep(4)
@@ -1635,6 +1636,7 @@ class YoutubeMusic:
             search_input.send_keys(lyrics)
             search_input.send_keys(Keys.RETURN)
 
+            self.sendoToTTS("Resultado encontrado. Aguarde um momento.")
             time.sleep(4)
 
             div = self.browser.find_elements(By.CLASS_NAME, "gsc-result")
@@ -1644,8 +1646,13 @@ class YoutubeMusic:
 
             self.sendoToTTS(f"Ótima música! {song} do cantor {artist}.")
 
-        except:
+            # Close the tab
+            self.browser.close()
+            self.browser.switch_to.window(self.browser.window_handles[0])
+
+        except Exception as e:
             self.sendoToTTS("Não foi possível encontrar a música.")
+            print(f"Error finding music by lyrics: {e}")
             return
 
     def help(self, option):

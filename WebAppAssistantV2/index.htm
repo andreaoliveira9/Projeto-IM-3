@@ -521,14 +521,14 @@
               var operation = "";
 
               for (let i = 0; i < data.entities.length; i++) {
-                if (data.entities[i].entity == "track")
+                if (data.entities[i].entity == "direction")
                   if (data.entities[i].value == "next") {
                     operation = "NEXT";
                   } else if (data.entities[i].value == "previous") {
                     operation = "PREVIOUS";
                   }
               }
-
+              
               if (operation != "") result.recognized.push(operation);
             } else if (data.intent.name == "select") {
               result.recognized.push("SELECT");
