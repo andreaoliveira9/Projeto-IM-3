@@ -15,6 +15,7 @@ intent_not_undestand_well_voice = None
 gesture_confirmation = None
 wainting = False
 
+
 def process_message(message):
     if message == "OK":
         return message, Type.OK
@@ -245,8 +246,6 @@ def speech_control(youtube_music, message):
             youtube_music.decrease_volume_while_talking()
             return
 
-        
-
     if confidence <= 0.45:
         youtube_music.sendoToTTS(random_not_understand())
         wainting = True
@@ -439,6 +438,7 @@ def speech_control(youtube_music, message):
         wainting = True
         youtube_music.decrease_volume_while_talking()
 
+
 def gesture_control(youtube_music, message):
     global gesture_confirmation, wainting
 
@@ -519,8 +519,6 @@ def gesture_control(youtube_music, message):
         youtube_music.move_down_music_list()
     elif message == "TESTEUP":
         youtube_music.move_up_music_list()
-    
-    
 
 
 def fusion_control(youtube_music, message):
@@ -528,7 +526,7 @@ def fusion_control(youtube_music, message):
     if wainting:
         wainting = False
         youtube_music.increase_volume_after_talking()
-        
+
     print(f"Fusion received: {message}")
     command = message[0][0]
 
@@ -581,11 +579,10 @@ async def main():
             try:
                 msg = await websocket.recv()
                 await message_handler(youtube_music=youtube_music, message=msg)
-                
+
             except Exception as e:
-                tts("Ocorreu um erro, a fechar o aplicativo")
+                tts("Ocorreu um erro!")
                 print(f"Error: {e}")
-                break
 
         youtube_music.close()
         exit(0)
