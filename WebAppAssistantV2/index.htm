@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>CASA VIVA + Assistant</title>
+    <title>Youtube Music Assistant</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -302,6 +302,10 @@
         transcriptDiv.innerHTML = firstSent;
         circle.animate(20, 0, "now").attr({ fill: "#000" });
         //startkws();
+      };
+
+      window.onload = function () {
+        recognition.start();
       };
 
       recognition.onresult = function (event) {
