@@ -4,6 +4,8 @@ import ssl
 import websockets
 from enums import Type
 import time
+from ollama import chat
+from ollama import ChatResponse
 
 from utils import *
 from youtube_music import YoutubeMusic
@@ -269,7 +271,17 @@ def speech_control(youtube_music, message):
 
     elif intent == "search_mmusic_by_lyrics":  # DONE
         youtube_music.sendoToTTS("Vou tentar encontrar a música.")
-        youtube_music.find_music_by_lyrics("crescer vai dar tempo")
+        response: ChatResponse = chat(model='llama3.2', messages=[
+            {
+                'role': 'system',
+                'content': 'És um sistema que analisa mensagens de texto e extrai apenas a letra de uma música que possa estar contida na mensagem. Ignora quaisquer informações adicionais ou irrelevantes.',
+            },
+            {
+                'role': 'user',
+                'content': 'A seguinte mensagem contém um pedido para encontrar uma música pela letra. Retorna exclusivamente a letra da música mencionada, sem introduções ou explicações adicionais: ' + message["text"]
+            },
+        ])
+        youtube_music.find_music_by_lyrics(response)
 
     elif intent == "control_music":  # DONE
         # Pausar ou continuar
